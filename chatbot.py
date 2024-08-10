@@ -1,21 +1,31 @@
-import google.generativeai as genai
+
+
+
+
 import streamlit as st
+import google.generativeai as genai
 
-GoogleAPI_key= "AIzaSyBN-yM2w7uTnK0eXIcfhzrtoycN5wnMgBw"
-genai.configure(api_key=GoogleAPI_key)
+# Configure the API key
+GOOGLE_API_KEY = "AIzaSyBby0c5DGbx4zzahWLs8S1iQ05dTz8oUEw"
+genai.configure(api_key=GOOGLE_API_KEY)
 
-# Initializing the Module
+# Initialize the Generative Model
+# model = genai.GenerativeModel('gemini-pro')
 model = genai.GenerativeModel('gemini-1.5-flash')
+# Function to get response from the model
 def get_chatbot_response(user_input):
-
     response = model.generate_content(user_input)
     return response.text
 
-st.set_page_config(page_title = "ASK ME CHATBOT ", layout = "centered")
-st.title("🧐ASK ME CHATBOT by Amina 🧠")
-st.write("Powered by Gemini-Google")
+# Streamlit interface
+st.set_page_config(page_title="ASK ME CHATBOT ", layout="centered")
+
+st.title("✨🧐ASK ME CHATBOT by Amina 🧠")
+st.write("Powered by Google Generative AI")
+
 if "history" not in st.session_state:
     st.session_state["history"] = []
+
 # Display chat history
 for user_message, bot_message in st.session_state.history:
     st.markdown(f"""
@@ -46,21 +56,21 @@ for user_message, bot_message in st.session_state.history:
     </div>
     """, unsafe_allow_html=True)
 
+# user_input = input("Enter your Prompt = ")
+# output = get_chatbot_response(user_input)
 
-# user_input = input("Enter your question = ")
-# output = getResponseForModel(user_input)
 # print(output)
-with st.form(key = "chat-form", clear_on_submit = True):
-    user_input = st.text_input("", max_chars = 2000)
-    submit_button = st.form_submit_button("Submit")
+
+with st.form(key="chat_form", clear_on_submit=True):
+    user_input = st.text_input("", max_chars=2000)
+    submit_button = st.form_submit_button("Send")
 
     if submit_button:
         if user_input:
             response = get_chatbot_response(user_input)
-            # st.write(response)
             st.session_state.history.append((user_input, response))
         else:
-            st.warning("Enter your query")
+            st.warning("Please Enter A Prompt")
 
 
 
